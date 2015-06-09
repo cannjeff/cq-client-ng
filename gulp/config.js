@@ -1,4 +1,5 @@
-var dest = './build';
+// var dest = './build';
+var dest = '/mnt/cq';
 var src = './src';
 
 module.exports = {
@@ -9,8 +10,8 @@ module.exports = {
 		}
 	},
 	sass: {
-		src: src + "/sass/**/*.{sass,scss}",
-		dest: dest,
+		src: src + '/assets/css/**/*.{sass,scss}',
+		dest: dest + '/css',
 		settings: {
 			// indentedSyntax: true, // Enable .sass syntax!
 			imagePath: 'images' // Used by the image-url helper
@@ -30,11 +31,19 @@ module.exports = {
 			// See https://github.com/greypants/gulp-starter/issues/87 for note about
 			// why this is 'backbone/node_modules/underscore' and not 'underscore'
 		}, */{
-			entries: src + '/javascript/app.js',
-			dest: dest,
+			entries: [ src + '/app/app.module.js' ],
+			dest: dest + '/js',
 			outputName: 'app.js',
 			// list of externally available modules to exclude from the bundle
 			external: [ 'jquery', 'underscore' ]
 		}]
+	},
+	moveAssets: {
+		src: src,
+		dest: dest
+	},
+	templateCache: {
+		src: src,
+		dest: dest
 	}
 };
