@@ -1,14 +1,11 @@
 var gulp 			= require('gulp');
 var debug 			= require('gulp-debug');
 var config 			= require('../config').moveAssets;
-var assetsToMove	= [
-		config.src + '/*.html',
-		config.src + '/app/**/**/*.html',
-		config.src + '/assets/libs/*'
-	];
+var browserSync  	= require('browser-sync');
 
 gulp.task('moveAssets', function () {
-	return gulp.src(assetsToMove)
+	return gulp.src(config.src)
 		.pipe(debug({ title: 'moveAssets:' }))
-		.pipe(gulp.dest(config.dest));
+		.pipe(gulp.dest(config.dest))
+		.pipe(browserSync.reload({ stream: true }));
 });

@@ -39,7 +39,11 @@ module.exports = {
 		}]
 	},
 	moveAssets: {
-		src: src,
+		src: [
+			src + '/*.html',
+			src + '/app/**/**/*.html',
+			src + '/assets/libs/*'
+		],
 		dest: dest
 	},
 	templateCache: {
