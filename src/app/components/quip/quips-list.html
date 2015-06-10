@@ -1,3 +1,6 @@
-<div>
-	Quips List
-</div>
+<h2>Quips</h2>
+<ul>
+	<li ng-repeat="quip in quips">
+		{{ quip.encrypted_text }}
+	</li>
+</ul>

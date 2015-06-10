@@ -15,3 +15,14 @@ cqApp.config([ '$routeProvider', function ( routeProvider ) {
 			controller: 'QuipsListCtrl'
 		});
 }]);
+
+cqApp.factory('quips', [ '$http', function ( http, countries ) {
+	return {
+		list: function ( callback ) {
+			http({
+				method: 'GET',
+				url: 'http://localhost:3000/api/quips' // ugly - fix it
+			}).success( callback );
+		}
+	}
+}]);
