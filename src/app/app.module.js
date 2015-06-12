@@ -21,7 +21,7 @@ cqApp.factory('quips', [ '$http', function ( http, countries ) {
 		list: function ( callback ) {
 			http({
 				method: 'GET',
-				url: 'http://localhost:3000/api/quips' // ugly - fix it
+				url: 'http://localhost:3000/v1/quips' // ugly - fix it
 			}).success( callback );
 		}
 	}
