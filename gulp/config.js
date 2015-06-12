@@ -1,5 +1,6 @@
 // var dest = './build';
-var dest = '/mnt/cq';
+// var dest = '/mnt/cq';
+var dest = './public';
 var src = './src';
 
 module.exports = {
