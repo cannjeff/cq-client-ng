@@ -5,6 +5,14 @@ window.cqApp = angular.module('cqApp', [
 	require('./components/quip/quipControllers').name
 ]);
 
+window.cqApp.__settings = {
+	api_host: 'api.cryptoquip.io',
+	api_version: 'v1',
+	apiBase: function () {
+		return 'http://' + this.api_host + '/' + this.api_version + '/';
+	}
+};
+
 cqApp.config([ '$routeProvider', function ( routeProvider ) {
 	routeProvider
 		.when('/', {
@@ -13,6 +21,10 @@ cqApp.config([ '$routeProvider', function ( routeProvider ) {
 		.when('/quips', {
 			templateUrl: 'components/quip/quips-list.html',
 			controller: 'QuipsListCtrl'
+		})
+		.when('/quips/:id', {
+			templateUrl: 'components/quip/quip-solve.html',
+			controller: 'QuipsSolveCtrl'
 		});
 }]);
 
@@ -21,7 +33,13 @@ cqApp.factory('quips', [ '$http', function ( http, countries ) {
 		list: function ( callback ) {
 			http({
 				method: 'GET',
-				url: 'http://localhost:3000/v1/quips' // ugly - fix it
+				url: window.cqApp.__settings.apiBase() + 'quips'
+			}).success( callback );
+		},
+		byID: function ( id, callback ) {
+			http({
+				method: 'GET',
+				url: window.cqApp.__settings.apiBase() + 'quips/' + id
 			}).success( callback );
 		}
 	}

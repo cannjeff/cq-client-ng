@@ -6,4 +6,10 @@ quipControllers.controller('QuipsListCtrl', [ '$scope', 'quips', function ( scop
 	});
 }]);
 
+quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams', function ( scope, quips, routeParams ) {
+	quips.byID(routeParams.id, function ( quip ) {
+		scope.quip = quip;
+	});
+}]);
+
 module.exports = quipControllers;

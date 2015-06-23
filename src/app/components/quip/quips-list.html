@@ -2,5 +2,8 @@
 <ul>
 	<li ng-repeat="quip in quips">
 		{{ quip.encrypted_text }}
+		<span>
+			<a href="#/quips/{{ quip._id }}">Solve</a>
+		</span>
 	</li>
 </ul>
