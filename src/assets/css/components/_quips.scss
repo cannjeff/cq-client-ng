@@ -1,0 +1,46 @@
+$charWidth: 25px;
+
+.alphabet_legend {
+	border: 2px solid black;
+
+	.pairing {
+		display: inline-block;
+		vertical-align: top;
+		height: 35px;
+	}
+	.key, .value {
+		min-width: $charWidth;
+	}
+	.key {
+		font-size: 18px;
+		font-weight: bold;
+	}
+	.value {
+		font-size: 12px;
+	}
+}
+
+.quip_char_wrapper {
+	display: inline-block;
+	vertical-align: top;
+	margin: 10px 5px;
+
+	&.punctuation {
+		margin: 10px 1px;
+
+		.quip_label, .quip_char {
+			width: 5px;
+		}
+	}
+	.quip_label, .quip_char {
+		width: $charWidth;
+		text-align: center;
+	}
+	.quip_char {
+		border: 1px solid gray;
+
+		&.value_set {
+			border-color: $light_grey;
+		}
+	}
+}

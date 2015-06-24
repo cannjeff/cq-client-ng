@@ -1,8 +1,14 @@
 var angular = require('angular-bsfy');
 
+var underscore = angular.module('underscore', []);
+underscore.factory('_', function () {
+	return window._; /* Underscore must already be loaded on the page */
+});
+
 window.cqApp = angular.module('cqApp', [
 	require('angular-bsfy/route').name,
-	require('./components/quip/quipControllers').name
+	require('./components/quip/quipControllers').name,
+	'underscore'
 ]);
 
 window.cqApp.__settings = {
