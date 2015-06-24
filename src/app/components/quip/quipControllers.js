@@ -37,7 +37,11 @@ quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams'
 		};
 
 		scope.valueSetFor = function ( key ) {
-			return !!scope.keyObject[ key ].length;
+			if (scope.keyObject[ key ]) {
+				return !!scope.keyObject[ key ].length;
+			} else {
+				return false
+			}
 		};
 
 		/* Splitting up the encrypted text string */
@@ -61,7 +65,32 @@ quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams'
 		});
 
 		scope.chars = chars;
+
+		scope.submitSolution = function () {
+			var encryptedText = quip.encrypted_text,
+				regex = new RegExp(_.keys(scope.keyObject).join('|'), 'g'),
+				solution = '';
+
+			solution = encryptedText.replace(regex, function ( matched ) {
+				return scope.keyObject[ matched ] || '_';
+			});
+
+			quips.solve( quip._id, solution, function ( resp ) {
+				resp.solved;
+			});
+		};
 	});
+}]);
+
+quipControllers.controller('QuipsCreateCtrl', [ '$scope', 'quips', function ( scope, quips ) {
+	scope.quip = {};
+
+	scope.createQuip = function () {
+		console.log(scope.quip);
+		// quips.create( scope.quip, function ( resp ) {
+
+		// });
+	};
 }]);
 
 module.exports = quipControllers;

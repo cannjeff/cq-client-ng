@@ -47,3 +47,18 @@ $charWidth: 25px;
 		}
 	}
 }
+
+.quip_create {
+	max-width: 800px;
+
+	.quip_text {
+		width: 100%;
+	}
+	.hint {
+		width: 50px;
+	}
+}
+
+.form_row {
+	margin: 10px 0px;
+}

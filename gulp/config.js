@@ -10,6 +10,7 @@ module.exports = {
 	},
 	sass: {
 		src: [
+			src + '/assets/css/*.{sass,scss}',
 			src + '/assets/css/**/*.{sass,scss}',
 			src + '/assets/css/**/**/*.{sass,scss}'
 		],

@@ -1,0 +1,13 @@
+#layout {
+	#menu {
+		width: 150px;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		background-color: $menu-background;
+	}
+	#main {
+		margin-left: 150px;
+		padding: 20px;
+	}
+}

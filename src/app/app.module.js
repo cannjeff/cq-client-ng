@@ -7,6 +7,7 @@ underscore.factory('_', function () {
 
 window.cqApp = angular.module('cqApp', [
 	require('angular-bsfy/route').name,
+	require('./components/menu/menuControllers').name,
 	require('./components/quip/quipControllers').name,
 	'underscore'
 ]);
@@ -28,6 +29,10 @@ cqApp.config([ '$routeProvider', function ( routeProvider ) {
 			templateUrl: 'components/quip/quips-list.html',
 			controller: 'QuipsListCtrl'
 		})
+		.when('/quips/create', {
+			templateUrl: 'components/quip/quip-create.html',
+			controller: 'QuipsCreateCtrl'
+		})
 		.when('/quips/:id', {
 			templateUrl: 'components/quip/quip-solve.html',
 			controller: 'QuipsSolveCtrl'
@@ -46,6 +51,20 @@ cqApp.factory('quips', [ '$http', function ( http, countries ) {
 			http({
 				method: 'GET',
 				url: window.cqApp.__settings.apiBase() + 'quips/' + id
+			}).success( callback );
+		},
+		solve: function ( id, solution, callback ) {
+			http({
+				method: 'GET',
+				url: window.cqApp.__settings.apiBase() + 'quips/' + id + '/solve',
+				params: { solution: solution }
+			}).success( callback );
+		},
+		create: function ( params, callback ) {
+			http({
+				method: 'GET',
+				url: window.cqApp.__settings.apiBase() + 'quips/create',
+				params: params
 			}).success( callback );
 		}
 	}

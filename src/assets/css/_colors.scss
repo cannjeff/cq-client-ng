@@ -1,1 +1,18 @@
 $light_grey: #EEE;
+$white: #FFF;
+
+/**
+ *	Palette
+ *	http://www.colourlovers.com/palette/359978/w_o_r_d_l_e_s_s_.
+ **/
+$palette-background: #FFF;
+$palette-secondary-background: #1C140D;
+$palette-primary: #CBE86B;
+$palette-secondary: #F2E9E1;
+$palette-tertiary: #CBE86B;
+
+/**
+ *	Convenience
+ **/ 
+$menu-background: $palette-secondary-background;
+$font-color: $palette-secondary-background;

@@ -1,0 +1,22 @@
+<h2>Quip Create</h2>
+<form class="pure-form quip_create">
+	<fieldset>
+		<div class="form_row">
+			<label>Quip (encrypted):</label>
+			<input class="quip_text" ng-model="quip.encrypted_text" />
+		</div>
+		<div class="form_row">
+			<label>Quip (decrypted):</label>
+			<input class="quip_text" ng-model="quip.decrypted_text" />
+		</div>
+		<div class="form_row">
+			<label>Hint:</label>
+			<input class="hint" ng-model="quip.hint_key" />
+			=>
+			<input class="hint" ng-model="quip.hint_value" />
+		</div>
+		<div class="form_row">
+			<input class="pure-button pure-button-primary" type="button" ng-click="createQuip()" value="Create" />
+		</div>
+	</fieldset>
+</form>
