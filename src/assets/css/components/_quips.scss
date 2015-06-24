@@ -1,7 +1,9 @@
 $charWidth: 25px;
 
 .alphabet_legend {
-	border: 2px solid black;
+	display: inline-block;
+	border: 1px solid black;
+	padding: 2px;
 
 	.pairing {
 		display: inline-block;
@@ -10,6 +12,7 @@ $charWidth: 25px;
 	}
 	.key, .value {
 		min-width: $charWidth;
+		text-align: center;
 	}
 	.key {
 		font-size: 18px;

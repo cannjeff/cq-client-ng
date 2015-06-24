@@ -1,10 +1,10 @@
 <h2>Quip Solve</h2>
-<div class="alphabet_legend">
+<span class="alphabet_legend">
 	<span class="pairing" ng-repeat="letter in alphabet">
 		<div class="key">{{ letter }}</div>
 		<div class="value">{{ keyObject[letter] }}</div>
 	</span>
-</div>
+</span>
 <h3>Hint: {{ quip.hint }}</h3>
 
 <span class="quip_char_wrapper" ng-repeat="char in chars" ng-class="{punctuation: char.isPunctuation()}">
