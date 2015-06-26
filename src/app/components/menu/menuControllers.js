@@ -13,6 +13,18 @@ menuControllers.controller('MainMenuCtrl', [ '$scope', function ( scope ) {
 		isSelected: function () {
 			return window.location.hash === this.href;
 		}
+	},/* {
+		text: 'Quarantine',
+		href: '#/quips/quarantine',
+		isSelected: function () {
+			return window.location.hash === this.href;
+		}
+	}, */{
+		text: 'Scratchpad',
+		href: '#/quips/scratchpad',
+		isSelected: function () {
+			return window.location.hash === this.href;
+		}
 	}];
 }]);
 

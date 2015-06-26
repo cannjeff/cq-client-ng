@@ -1,0 +1,24 @@
+<h2>Quip Quarantine</h2>
+<table class="pure-table">
+	<thead>
+		<tr>
+			<th>Quip (encrypted)</th>
+			<th>Quip (decrypted)</th>
+			<th>Hint</th>
+			<th>Date</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="quip in quips">
+			<td>{{ quip.encrypted_text }}</td>
+			<td>{{ quip.decrypted_text }}</td>
+			<td>{{ quip.hint }}</td>
+			<td>{{ quip.date }}</td>
+			<td>
+				<input class="pure-button button-success button-xsmall" type="button" value="Approve" ng-click="approve(quip._id)" />
+				<input class="pure-button button-error button-xsmall" type="button" value="Reject" ng-click="reject(quip._id)" />
+			</td>
+		</tr>
+	</tbody>
+</table>

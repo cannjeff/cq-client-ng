@@ -1,19 +1,29 @@
 <h2>Quip Create</h2>
 <form class="pure-form quip_create">
+	<div class="notes">
+		<ul>
+			<li>Encrypted quip will be generated if not supplied.</li>
+			<li>Quips will be quarantined before going live.</li>
+		</ul>
+	</div>
 	<fieldset>
+		<div class="form_row">
+			<label>Quip:*</label>
+			<input class="quip_text" ng-model="quip.decrypted_text" required />
+		</div>
 		<div class="form_row">
 			<label>Quip (encrypted):</label>
 			<input class="quip_text" ng-model="quip.encrypted_text" />
 		</div>
 		<div class="form_row">
-			<label>Quip (decrypted):</label>
-			<input class="quip_text" ng-model="quip.decrypted_text" />
+			<label>Hint:*</label>
+			<input class="hint" ng-model="quip.hint_key" required />
+			=>
+			<input class="hint" ng-model="quip.hint_value" required />
 		</div>
 		<div class="form_row">
-			<label>Hint:</label>
-			<input class="hint" ng-model="quip.hint_key" />
-			=>
-			<input class="hint" ng-model="quip.hint_value" />
+			<label>Date (mm/dd/yyyy):</label>
+			<input ng-model="quip.date" required />
 		</div>
 		<div class="form_row">
 			<input class="pure-button pure-button-primary" type="button" ng-click="createQuip()" value="Create" />

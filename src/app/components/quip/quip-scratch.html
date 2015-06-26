@@ -1,0 +1,21 @@
+<h2>Quip Scratchpad</h2>
+
+<form class="pure-form quip_create quip_scratchpad">
+	<input class="quip_text" type="text" placeholder="Paste quip here" ng-model="quip.encrypted_text" ng-change="updateQuip()" />
+</form>
+
+<div class="alphabet_legend">
+	<span class="pairing" ng-repeat="letter in alphabet">
+		<div class="key">{{ letter }}</div>
+		<div class="value">{{ keyObject[letter] }}</div>
+	</span>
+</div>
+
+<div>
+	<span class="quip_char_wrapper" ng-repeat="char in chars" ng-class="{punctuation: char.isPunctuation()}">
+		<div class="quip_label">{{ char.value }}</div>
+		<input class="quip_char" type="text" ng-if="char.shouldShowInput()" ng-model=keyObject[char.value] ng-change="updateMap(char.value)" ng-class="{value_set: valueSetFor(char.value)}" />
+		<div ng-if="!char.shouldShowInput()">{{ char.value }}</div>
+		<!-- <select ng-options="o as o for o in alphabet"></select> -->
+	</span>
+</div>

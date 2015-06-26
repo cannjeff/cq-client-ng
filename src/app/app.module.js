@@ -33,6 +33,14 @@ cqApp.config([ '$routeProvider', function ( routeProvider ) {
 			templateUrl: 'components/quip/quip-create.html',
 			controller: 'QuipsCreateCtrl'
 		})
+		.when('/quips/quarantine', {
+			templateUrl: 'components/quip/quip-quarantine.html',
+			controller: 'QuipsQuarantineCtrl'
+		})
+		.when('/quips/scratchpad', {
+			templateUrl: 'components/quip/quip-scratch.html',
+			controller: 'QuipsScratchCtrl',
+		})
 		.when('/quips/:id', {
 			templateUrl: 'components/quip/quip-solve.html',
 			controller: 'QuipsSolveCtrl'
@@ -65,6 +73,24 @@ cqApp.factory('quips', [ '$http', function ( http, countries ) {
 				method: 'GET',
 				url: window.cqApp.__settings.apiBase() + 'quips/create',
 				params: params
+			}).success( callback );
+		},
+		quarantineList: function ( callback ) {
+			http({
+				method: 'GET',
+				url: window.cqApp.__settings.apiBase() + 'quips_quarantine/'
+			}).success( callback );
+		},
+		approve: function ( id, callback ) {
+			http({
+				method: 'GET',
+				url: window.cqApp.__settings.apiBase() + 'quips_quarantine' + id + '/approve'
+			}).success( callback );
+		},
+		reject: function ( id, callback ) {
+			http({
+				method: 'GET',
+				url: window.cqApp.__settings.apiBase() + 'quips_quarantine' + id + '/reject'
 			}).success( callback );
 		}
 	}

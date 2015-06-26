@@ -86,10 +86,72 @@ quipControllers.controller('QuipsCreateCtrl', [ '$scope', 'quips', function ( sc
 	scope.quip = {};
 
 	scope.createQuip = function () {
-		console.log(scope.quip);
-		// quips.create( scope.quip, function ( resp ) {
+		scope.quip.hint = scope.quip.hint_key + ' => ' + scope.quip.hint_value;
+		quips.create( scope.quip, function ( resp ) {
+			console.log('create resp', resp);
+		});
+	};
+}]);
 
-		// });
+quipControllers.controller('QuipsQuarantineCtrl', [ '$scope', 'quips', function ( scope, quips ) {
+	quips.quarantineList(function ( quips ) {
+		scope.quips = quips;
+	});
+
+	scope.approve = function ( id ) {
+		quips.approve( id, function ( resp ) {
+
+		});
+	};
+
+	scope.reject = function ( id ) {
+		quips.reject( id, function ( resp ) {
+
+		});
+	};
+}]);
+
+quipControllers.controller('QuipsScratchCtrl', [ '$scope', function ( scope ) {
+	scope.alphabet = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ];
+	scope.keyObject = _.object(scope.alphabet);
+	scope.quip = { encrypted_text: '' };
+
+	scope.updateMap = function ( key ) {
+		/* Force uppercase and cap at one letter */
+		scope.keyObject[ key ] = scope.keyObject[ key ].slice(-1).toUpperCase();
+
+		key = key.toUpperCase();
+
+		/* Check for duplicates and replace the old ones */
+		var val = scope.keyObject[ key ];
+		if (val && val.length) {
+			_(scope.alphabet).each(function ( letter ) {
+				/* Exclude the current key. If any others match up clear them */
+				if (letter !== key && scope.keyObject[ letter ] === val) {
+					scope.keyObject[ letter ] = '';
+				}
+			});
+		}
+	};
+
+	scope.updateQuip = function () {
+		var encryptedText = scope.quip.encrypted_text.toUpperCase(),
+			charArr = encryptedText.split(''),
+			chars;
+
+		chars = _.map(charArr, function ( letter ) {
+			return {
+				value: letter,
+				shouldShowInput: function () {
+					return /^[a-zA-Z]+$/.test( letter );
+				},
+				isPunctuation: function () {
+					return /^[\.,"':;?]$/.test( letter );
+				}
+			};
+		});
+
+		scope.chars = chars;
 	};
 }]);
 
