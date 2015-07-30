@@ -82,6 +82,9 @@ cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, http
 
 cqApp.run([ '$rootScope', '$location', 'UserService', function ( rootScope, location, UserService ) {
 	rootScope.$on('$routeChangeStart', ( event, params ) => {
+		if (params.$$route.originalPath.indexOf('login') !== -1 || params.$$route.originalPath.indexOf('signUp') !== -1) {
+			return;
+		}
 		if (!UserService.isLoggedIn()) {
 			console.log('User not logged in, rerouting to login');
 			location.path('/login');
