@@ -6,7 +6,9 @@ module.exports = {
 		server: {
 			// Serve up our build folder
 			baseDir: dest
-		}
+		},
+		open: false,
+		https: false
 	},
 	sass: {
 		src: [
@@ -52,5 +54,13 @@ module.exports = {
 	templateCache: {
 		src: src,
 		dest: dest
+	},
+	jshint: {
+		src: [
+			src + '/app/*.js',
+			src + '/app/**/*.js',
+			src + '/app/**/**/*.js',
+			src + '/app/**/**/**/*.js'
+		]
 	}
 };

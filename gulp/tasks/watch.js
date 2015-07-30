@@ -3,13 +3,20 @@
    - gulp/tasks/browserSync.js watches and reloads compiled files
 */
 
-var gulp     = require('gulp');
-var config   = require('../config');
+var gulp     	= require('gulp');
+var config   	= require('../config');
+var watch 		= require('gulp-watch');
 
 gulp.task('watch', [ 'watchify', 'browserSync' ], function () {
-	gulp.watch(config.sass.src,   [ 'sass' ]);
-	gulp.watch(config.moveAssets.src, [ 'moveAssets' ]);
-	// gulp.watch(config.images.src, ['images']);
-	// gulp.watch(config.markup.src, ['markup']);
-	// Watchify will watch and recompile our JS, so no need to gulp.watch it
+
+	watch(config.sass.src, function () {
+		gulp.start('sass');
+	});
+	watch(config.moveAssets.src, function () {
+		gulp.start('moveAssets');
+	});
+	watch(config.jshint.src, function () {
+		gulp.start('jshint');
+	});
+
 });

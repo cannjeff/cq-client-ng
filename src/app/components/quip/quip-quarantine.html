@@ -13,7 +13,7 @@
 		<tr ng-repeat="quip in quips">
 			<td>{{ quip.encrypted_text }}</td>
 			<td>{{ quip.decrypted_text }}</td>
-			<td>{{ quip.hint }}</td>
+			<td>{{ quip.hint_key }}=>{{ quip.hint_value }}</td>
 			<td>{{ quip.date }}</td>
 			<td>
 				<input class="pure-button button-success button-xsmall" type="button" value="Approve" ng-click="approve(quip._id)" />

@@ -1,0 +1,11 @@
+.cq-screen-admin {
+	.fa {
+		cursor: pointer;
+		&.green {
+			color: green;
+		}
+		&.red {
+			color: red;
+		}
+	}
+}

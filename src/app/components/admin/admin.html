@@ -1,0 +1,36 @@
+<div class="cq-screen-admin">
+	<h2>Admin</h2>
+	<div class="pure-form">
+		<input type="text" placeholder="Search" ng-model="searchString" />
+	</div>
+	<table class="pure-table">
+		<thead>
+			<tr>
+				<th>Username</th>
+				<th>Admin</th>
+				<th>Curator</th>
+				<th>Date</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="user in users | filter:searchString">
+				<td>{{ user.username }}</td>
+				<td>
+					<i class="fa fa-plus green" ng-show="!user.admin" ng-click="setAdmin(user._id)"></i>
+					<i class="fa fa-minus red" ng-show="user.admin" ng-click="unsetAdmin(user._id)"></i>
+					{{ user.admin }}
+				</td>
+				<td>
+					<i class="fa fa-plus green" ng-show="!user.curator" ng-click="setCurator(user._id)"></i>
+					<i class="fa fa-minus red" ng-show="user.curator" ng-click="unsetCurator(user._id)"></i>
+					{{ user.curator }}
+				</td>
+				<td>{{ user.formattedCreatedDate }}</td>
+				<td>
+					<input class="pure-button button-error button-xsmall" type="button" value="Remove" ng-click="removeUser(user._id)" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

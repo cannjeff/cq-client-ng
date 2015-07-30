@@ -11,11 +11,14 @@ quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams'
 		scope.quip = quip;
 		scope.alphabet = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ];
 		scope.keyObject = _.object(scope.alphabet); /* keyObject is a terrible name, but its late and im tired */
+		scope.dictHistory = [];
 
 		/* Set the hint by default (lock it later?) */
 		var hintKey = quip.hint.charAt(0).toUpperCase(),
 			hintVal = quip.hint.slice(-1).toUpperCase();
 		scope.keyObject[ hintKey ] = hintVal;
+
+		// scope.dictHistory.push( _.extend({}, scope.keyObject) );
 
 		scope.updateMap = function ( key ) {
 			/* Force uppercase and cap at one letter */
@@ -30,6 +33,8 @@ quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams'
 						scope.keyObject[ letter ] = '';
 					}
 				});
+
+				scope.dictHistory.push( _.extend({}, scope.keyObject) );
 			} else if (val === hintVal) {
 				/* Don't allow them to override the hint */
 				scope.keyObject[ key ] = '';
@@ -40,7 +45,13 @@ quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams'
 			if (scope.keyObject[ key ]) {
 				return !!scope.keyObject[ key ].length;
 			} else {
-				return false
+				return false;
+			}
+		};
+
+		scope.undo = function () {
+			if (scope.dictHistory.length > 0) {
+				scope.keyObject = scope.dictHistory.pop();
 			}
 		};
 
@@ -76,8 +87,16 @@ quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams'
 			});
 
 			quips.solve( quip._id, solution, function ( resp ) {
-				resp.solved;
+				// resp.solved;
 			});
+		};
+
+		scope.focus = function ( idx) {
+			console.log('focus', idx);
+		};
+
+		scope.blur = function () {
+			console.log('blur');
 		};
 	});
 }]);
@@ -86,7 +105,6 @@ quipControllers.controller('QuipsCreateCtrl', [ '$scope', 'quips', function ( sc
 	scope.quip = {};
 
 	scope.createQuip = function () {
-		scope.quip.hint = scope.quip.hint_key + ' => ' + scope.quip.hint_value;
 		quips.create( scope.quip, function ( resp ) {
 			console.log('create resp', resp);
 		});

@@ -5,11 +5,16 @@
 		<div class="value">{{ keyObject[letter] }}</div>
 	</span>
 </span>
+
+<div>
+	<button class="pure-button pure-button-primary" ng-click="undo()">Undo</button>
+</div>
+
 <h3>Hint: {{ quip.hint }}</h3>
 
 <span class="quip_char_wrapper" ng-repeat="char in chars" ng-class="{punctuation: char.isPunctuation()}">
 	<div class="quip_label">{{ char.value }}</div>
-	<input class="quip_char" type="text" ng-if="char.shouldShowInput()" ng-model=keyObject[char.value] ng-change="updateMap(char.value)" ng-class="{value_set: valueSetFor(char.value)}" ng-disabled="char.isHint()" />
+	<input class="quip_char" type="text" ng-if="char.shouldShowInput()" ng-model=keyObject[char.value] ng-change="updateMap(char.value)" ng-class="{value_set: valueSetFor(char.value)}" ng-disabled="char.isHint()" ng-blur="blur()" ng-focus="focus(this, $index)" data-index="{{ $index }}"/>
 	<div ng-if="!char.shouldShowInput()">{{ char.value }}</div>
 	<!-- <select ng-options="o as o for o in alphabet"></select> -->
 </span>
