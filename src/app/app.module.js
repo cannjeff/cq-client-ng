@@ -11,7 +11,7 @@ angular.module('moment', [])
 		return moment;
 	});
 
-require('ngStorage');
+require('ngstorage');
 require('./app.services');
 
 window.cqApp = angular.module('cqApp', [
