@@ -28,7 +28,7 @@ window.cqApp = angular.module('cqApp', [
 ]);
 
 window.cqApp.__settings = {
-	api_protocol: localStorage.getItem('cq_api_protocol') || 'http',
+	api_protocol: localStorage.getItem('cq_api_protocol') || 'https',
 	api_host: localStorage.getItem('cq_api_host') || 'api.cryptoquip.io',
 	api_version: localStorage.getItem('cq_api_version') || 'v1',
 	apiBase: function () {
