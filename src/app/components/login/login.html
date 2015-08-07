@@ -1,15 +1,14 @@
-<form class="pure-form pure-form-stacked">
-	<fieldset>
-		<input class="" ng-model="username" placeholder="Username" />
-		<input class="" ng-model="password" type="password" placeholder="Password" />
+<div class="cq-screen-login">
+	<form name="loginForm" class="pure-form pure-form-stacked cq-form cq-login-form">
+		<div class="cq-form-error" ng-show="formError">
+			<div>{{ formError.message }}</div>
+		</div>
+		<fieldset>
+			<input class="pure-input-1" ng-model="username" placeholder="Username" autocapitalize="off" required />
+			<input class="pure-input-1" ng-model="password" type="password" placeholder="Password" required />
 
-		<!-- <div class="remember-me-wrapper">
-			<input type="checkbox" ng-model="rememberMe" />
-			Remember me
-		</div> -->
-
-		<input class="pure-button pure-button-primary" type="button" value="Login" ng-click="login()" />
-
-		<a href="#/signUp">Sign Up!</a>
-	</fieldset>
-</form>
+			<button class="pure-button pure-button-primary" type="button" ng-click="login()" ng-disabled="!loginForm.$valid">Login</button>
+			<a class="cq-sign-up" href="#/signUp">Sign Up!</a>
+		</fieldset>
+	</form>
+</div>

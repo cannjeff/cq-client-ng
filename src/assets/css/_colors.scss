@@ -12,7 +12,37 @@ $palette-secondary: #F2E9E1;
 $palette-tertiary: #CBE86B;
 
 /**
+ *	http://www.colourlovers.com/palette/482774/dream_magnet
+ **/
+// $palette-background: #343838;
+// $palette-secondary-background: #005F6B;
+// $palette-primary: #008C9E;
+// $palette-secondary: #00B4CC;
+// $palette-tertiary: #00DFFC;
+
+/**
+ *	http://www.colourlovers.com/palette/637498/Bali
+ **/
+// $palette-background: #fff; // not in palette
+// $palette-secondary-background: #1D1114;
+// $palette-primary: #10613C;
+// $palette-secondary: #699828;
+// $palette-tertiary: #DECE53;
+// $palette-quaternary: #DAA03A;
+// $menu-background: $palette-quaternary;
+
+/**
+ *	http://www.colourlovers.com/palette/1413237/groupon.com
+ **/
+$palette-background: 			#fff;
+$palette-secondary-background: 	#96BA5A;
+$palette-primary: 				#84B154;
+$palette-secondary: 			#5AAC7B;
+$palette-tertiary: 				#4BC1DD;
+$font-color: 					#000;
+
+/**
  *	Convenience
- **/ 
+ **/
 $menu-background: $palette-secondary-background;
-$font-color: $palette-secondary-background;
+// $font-color: $palette-secondary-background;

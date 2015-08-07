@@ -1,6 +1,8 @@
 var adminControllers = angular.module('adminControllers', []);
 
 adminControllers.controller('AdminCtrl', [ '$scope', '$rootScope', 'account', '$location', 'moment', function ( scope, rootScope, account, location, moment ) {
+	rootScope.menuActive = false;
+
 	scope.updateUserList = function () {
 		account.list(function ( data ) {
 			if (data.success && data.data) {

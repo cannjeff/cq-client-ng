@@ -1,14 +1,18 @@
 .pure-menu-selected {
-	background-color: $palette-primary;
+	background-color: $palette-background;
+
+	.pure-menu-link, .pure-menu-link:visited {
+		color: $palette-secondary-background;
+	}
 }
 .pure-menu-heading {
-	color: $palette-secondary;
+	color: $palette-background;
 }
 .pure-menu-link {
-	color: $palette-secondary;
+	color: $palette-background;
 
 	&:hover, &:focus {
 		color: $palette-secondary-background;
-		background-color: $palette-primary;
+		background-color: $palette-background;
 	}
 }

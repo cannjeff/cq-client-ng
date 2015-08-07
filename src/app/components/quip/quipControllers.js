@@ -1,24 +1,38 @@
 var quipControllers = angular.module('quipControllers', []);
 
-quipControllers.controller('QuipsListCtrl', [ '$scope', 'quips', function ( scope, quips ) {
+quipControllers.controller('QuipsListCtrl', [ '$rootScope', '$scope', '$location', 'quips', '_', 'moment', function ( rootScope, scope, location, quips, _, moment ) {
+	rootScope.menuActive = false;
+
 	quips.list(function ( quips ) {
+		_(quips).each(function ( quip ) {
+			if (quip.created_date) {
+				quip.formattedCreatedDate = moment(quip.created_date).format('dddd, MMMM Do YYYY');
+			}
+		});
 		scope.quips = quips;
 	});
+
+	scope.navToQuip = ( id ) => {
+		location.path( '/quips/' + id);
+	};
 }]);
 
-quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams', '_', function ( scope, quips, routeParams, _ ) {
+quipControllers.controller('QuipsSolveCtrl', [ '$rootScope', '$scope', 'quips', '$routeParams', '_', function ( rootScope, scope, quips, routeParams, _ ) {
+	rootScope.menuActive = false;
+
 	quips.byID(routeParams.id, function ( quip ) {
 		scope.quip = quip;
 		scope.alphabet = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ];
 		scope.keyObject = _.object(scope.alphabet); /* keyObject is a terrible name, but its late and im tired */
 		scope.dictHistory = [];
+		scope._ = _;
 
 		/* Set the hint by default (lock it later?) */
-		var hintKey = quip.hint.charAt(0).toUpperCase(),
-			hintVal = quip.hint.slice(-1).toUpperCase();
+		var hintKey = quip.hint_key.toUpperCase(),
+			hintVal = quip.hint_value.toUpperCase();
 		scope.keyObject[ hintKey ] = hintVal;
 
-		// scope.dictHistory.push( _.extend({}, scope.keyObject) );
+		scope.dictHistory.push( _.extend({}, scope.keyObject) );
 
 		scope.updateMap = function ( key ) {
 			/* Force uppercase and cap at one letter */
@@ -33,12 +47,12 @@ quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams'
 						scope.keyObject[ letter ] = '';
 					}
 				});
-
 				scope.dictHistory.push( _.extend({}, scope.keyObject) );
 			} else if (val === hintVal) {
 				/* Don't allow them to override the hint */
 				scope.keyObject[ key ] = '';
 			}
+			console.log(scope.dictHistory.length);
 		};
 
 		scope.valueSetFor = function ( key ) {
@@ -50,43 +64,73 @@ quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams'
 		};
 
 		scope.undo = function () {
-			if (scope.dictHistory.length > 0) {
+			if (scope.dictHistory.length > 1) { /* Always leave the initial entry */
 				scope.keyObject = scope.dictHistory.pop();
 			}
 		};
 
-		/* Splitting up the encrypted text string */
-		var encryptedText = quip.encrypted_text,
-			charArr = encryptedText.split(''),
-			chars;
+		scope.reset = () => {
+			scope.keyObject = _.object(scope.alphabet);
+			scope.keyObject[ hintKey ] = hintVal;
+			scope.dictHistory = [];
+			scope.dictHistory.push( _.extend({}, scope.keyObject) );
+		};
 
-		chars = _.map(charArr, function ( letter ) {
+		/* Splitting up the encrypted text string */
+		// var encryptedText = quip.encrypted_text,
+		// 	charArr = encryptedText.split(''),
+		// 	chars;
+
+		// chars = _.map(charArr, function ( letter ) {
+		// 	return {
+		// 		value: letter,
+		// 		shouldShowInput: function () {
+		// 			return /^[a-zA-Z]+$/.test( letter );
+		// 		},
+		// 		isPunctuation: function () {
+		// 			return /^[\.,"':;?]$/.test( letter );
+		// 		},
+		// 		isHint: function () {
+		// 			return letter === hintKey;
+		// 		}
+		// 	};
+		// });
+
+		// scope.chars = chars;
+		var wordToObj = ( letter ) => {
 			return {
 				value: letter,
-				shouldShowInput: function () {
+				shouldShowInput: () => {
 					return /^[a-zA-Z]+$/.test( letter );
 				},
-				isPunctuation: function () {
+				isPunctuation: () => {
 					return /^[\.,"':;?]$/.test( letter );
 				},
-				isHint: function () {
+				isHint: () => {
 					return letter === hintKey;
 				}
 			};
-		});
+		};
 
-		scope.chars = chars;
+		var words = quip.encrypted_text.split(' ');
+		_(words).each(( word, idx, arr ) => {
+			arr[idx] = _(word.split('')).map(wordToObj);
+		});
+		scope.words = words;
 
 		scope.submitSolution = function () {
 			var encryptedText = quip.encrypted_text,
 				regex = new RegExp(_.keys(scope.keyObject).join('|'), 'g'),
-				solution = '';
+				params = {
+					solution: '',
+					keyObject: scope.keyObject
+				};
 
-			solution = encryptedText.replace(regex, function ( matched ) {
+			params.solution = encryptedText.replace(regex, function ( matched ) {
 				return scope.keyObject[ matched ] || '_';
 			});
 
-			quips.solve( quip._id, solution, function ( resp ) {
+			quips.solve( quip._id, params, function ( resp ) {
 				// resp.solved;
 			});
 		};
@@ -101,7 +145,9 @@ quipControllers.controller('QuipsSolveCtrl', [ '$scope', 'quips', '$routeParams'
 	});
 }]);
 
-quipControllers.controller('QuipsCreateCtrl', [ '$scope', 'quips', function ( scope, quips ) {
+quipControllers.controller('QuipsCreateCtrl', [ '$rootScope', '$scope', 'quips', function ( rootScope, scope, quips ) {
+	rootScope.menuActive = false;
+
 	scope.quip = {};
 
 	scope.createQuip = function () {
@@ -111,7 +157,9 @@ quipControllers.controller('QuipsCreateCtrl', [ '$scope', 'quips', function ( sc
 	};
 }]);
 
-quipControllers.controller('QuipsQuarantineCtrl', [ '$scope', 'quips', function ( scope, quips ) {
+quipControllers.controller('QuipsQuarantineCtrl', [ '$rootScope', '$scope', 'quips', function ( rootScope, scope, quips ) {
+	rootScope.menuActive = false;
+
 	quips.quarantineList(function ( quips ) {
 		scope.quips = quips;
 	});
@@ -129,7 +177,9 @@ quipControllers.controller('QuipsQuarantineCtrl', [ '$scope', 'quips', function 
 	};
 }]);
 
-quipControllers.controller('QuipsScratchCtrl', [ '$scope', function ( scope ) {
+quipControllers.controller('QuipsScratchCtrl', [ '$rootScope', '$scope', function ( rootScope, scope ) {
+	rootScope.menuActive = false;
+
 	scope.alphabet = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ];
 	scope.keyObject = _.object(scope.alphabet);
 	scope.quip = { encrypted_text: '' };

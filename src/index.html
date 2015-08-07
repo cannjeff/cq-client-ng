@@ -22,16 +22,23 @@
 		<script type="text/javascript" src="js/app.js"></script>
 	</head>
 	<body>
-		<div id="layout">
+		<div id="layout" ng-class="{ 'active': menuActive }">
 
-			<div id="menu">
+			<!-- Menu toggle -->
+			<div id="menuLink" class="menu-link" ng-click="menuActive = !menuActive">
+				<!-- Hamburger icon -->
+				<i class="fa fa-bars"></i>
+			</div>
+
+			<div id="menu" ng-hide="hideMenu">
 				<div cq-menu></div>
 			</div>
 
 			<div id="main">
-				<div ng-controller="UserCtrl" ng-show="currentUser">
+				<div class="cq-user-menu-wrapper" ng-controller="UserCtrl" ng-show="currentUser">
 					<span>{{ currentUser.username }}</span>
-					<i class="fa fa-sign-out" ng-click="logout()"></i>
+					<i class="fa fa-key cq-pointer" title="Change Password" ng-click="changePassword()"></i>
+					<i class="fa fa-sign-out cq-pointer" title="Logout" ng-click="logout()"></i>
 				</div>
 				<div ng-view></div>
 			</div>

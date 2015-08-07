@@ -1,23 +1,28 @@
-<h2>Quip Solve</h2>
-<span class="alphabet_legend">
-	<span class="pairing" ng-repeat="letter in alphabet">
-		<div class="key">{{ letter }}</div>
-		<div class="value">{{ keyObject[letter] }}</div>
+<div class="cq-screen-quips-solve">
+	<h2>Solve</h2>
+	<span class="alphabet_legend">
+		<span class="pairing" ng-repeat="letter in alphabet" ng-class="{ 'pairing-used': _.invert(keyObject)[letter].length > 0 }">
+			<div class="key">{{ letter }}</div>
+			<div class="value">{{ _.invert(keyObject)[letter] }}</div>
+		</span>
 	</span>
-</span>
 
-<div>
-	<button class="pure-button pure-button-primary" ng-click="undo()">Undo</button>
-</div>
+	<div>
+		<button class="pure-button pure-button-primary" ng-click="undo()" ng-disabled="dictHistory.length === 1">Undo</button>
+		<button class="pure-button button-warning" ng-click="reset()">Reset</button>
+	</div>
 
-<h3>Hint: {{ quip.hint }}</h3>
+	<h3>Hint: {{ quip.hint_key }} => {{ quip.hint_value }}</h3>
 
-<span class="quip_char_wrapper" ng-repeat="char in chars" ng-class="{punctuation: char.isPunctuation()}">
-	<div class="quip_label">{{ char.value }}</div>
-	<input class="quip_char" type="text" ng-if="char.shouldShowInput()" ng-model=keyObject[char.value] ng-change="updateMap(char.value)" ng-class="{value_set: valueSetFor(char.value)}" ng-disabled="char.isHint()" ng-blur="blur()" ng-focus="focus(this, $index)" data-index="{{ $index }}"/>
-	<div ng-if="!char.shouldShowInput()">{{ char.value }}</div>
-	<!-- <select ng-options="o as o for o in alphabet"></select> -->
-</span>
-<div>
-	<button class="pure-button pure-button-primary" ng-click="submitSolution()">Submit</button>
+	<div class="cq-word-chunk" ng-repeat="word in words">
+		<span class="quip_char_wrapper" ng-repeat="char in word" ng-class="{punctuation: char.isPunctuation()}">
+			<div class="quip_label">{{ char.value }}</div>
+			<input class="quip_char" type="text" ng-if="char.shouldShowInput()" ng-model="keyObject[char.value]" ng-change="updateMap(char.value)" ng-class="{value_set: valueSetFor(char.value)}" ng-disabled="char.isHint()" ng-blur="blur()" ng-focus="focus(this, $index)" data-index="{{ $index }}"/>
+			<div ng-if="!char.shouldShowInput()">{{ char.value }}</div>
+		</span>
+	</div>
+
+	<div>
+		<button class="pure-button pure-button-primary" ng-click="submitSolution()">Submit</button>
+	</div>
 </div>

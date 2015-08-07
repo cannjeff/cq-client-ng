@@ -4,11 +4,16 @@ $charWidth: 25px;
 	display: inline-block;
 	border: 1px solid black;
 	padding: 2px;
+	margin-bottom: 10px;
 
 	.pairing {
 		display: inline-block;
 		vertical-align: top;
 		height: 35px;
+
+		&.pairing-used {
+			color: lighten($font-color, 75%);
+		}
 	}
 	.key, .value {
 		min-width: $charWidth;
@@ -41,6 +46,8 @@ $charWidth: 25px;
 	}
 	.quip_char {
 		border: 1px solid gray;
+		padding-left: 0;
+		padding-right: 0;
 
 		&.value_set {
 			border-color: $light_grey;

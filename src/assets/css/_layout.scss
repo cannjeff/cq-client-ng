@@ -7,7 +7,87 @@
 		background-color: $menu-background;
 	}
 	#main {
-		margin-left: 150px;
+		// margin-left: 150px;
 		padding: 20px;
+	}
+}
+
+
+
+
+/**
+ *	Enabling responsive menu
+ **/
+
+/* Add transition to containers so they can push in and out. */
+#layout,
+#menu,
+.menu-link {
+	transition: all 0.2s ease-out;
+}
+/* This is the parent `<div>` that contains the menu and the content area. */
+#layout {
+	position: relative;
+	padding-left: 0;
+
+	&.active {
+		#menu {
+			left: 150px;
+			width: 150px;
+		}
+		.menu-link {
+			left: 150px;
+		}
+	}
+}
+#menu {
+	margin-left: -150px; /* "#menu" width */
+	width: 150px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	z-index: 1000; /* so the menu or its navicon stays above all content */
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+}
+.menu-link {
+	position: fixed;
+	display: block;
+	top: 0;
+	left: 0;
+	background-color: $menu-background;
+	color: $white;
+	height: auto;
+	// width: 32px;
+	font-size: 21px;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+@media (min-width: 768px) {
+	#layout {
+		padding-left: 150px;
+		left: 0;
+		&.active {
+			.menu-link {
+				left: 150px;
+			}
+		}
+	}
+	#menu {
+		left: 150px;
+	}
+	.menu-link {
+		position: fixed;
+		left: 150px;
+		display: none;
+	}
+}
+
+@media (max-width: 768px) {
+	#layout.active {
+		position: relative;
+		left: 150px;
 	}
 }

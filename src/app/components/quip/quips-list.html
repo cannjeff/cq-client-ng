@@ -1,9 +1,23 @@
-<h2>Quips</h2>
-<ul>
-	<li ng-repeat="quip in quips">
-		{{ quip.encrypted_text }}
-		<span>
-			<a href="#/quips/{{ quip._id }}">Solve</a>
-		</span>
-	</li>
-</ul>
+<div class="cq-screen-quips-list">
+	<h2>Quips</h2>
+	<table class="pure-table">
+		<thead>
+			<tr>
+				<th>Date Added</th>
+				<th>Quip</th>
+				<th>Solved</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="quip in quips">
+				<td>{{ quip.formattedCreatedDate }}</td>
+				<td>{{ quip.encrypted_text }}</td>
+				<td>{{ quip.solved }}</td>
+				<td>
+					<button class="pure-button pure-button-primary" ng-click="navToQuip(quip._id)">Solve</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

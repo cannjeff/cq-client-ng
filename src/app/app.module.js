@@ -51,6 +51,10 @@ cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, http
 			templateUrl: 'components/login/sign-up.html',
 			controller: 'SignUpCtrl'
 		})
+		.when('/changePassword', {
+			templateUrl: 'components/login/change-password.html',
+			controller: 'ChangePasswordCtrl'
+		})
 		.when('/quips', {
 			templateUrl: 'components/quip/quips-list.html',
 			controller: 'QuipsListCtrl'
@@ -124,9 +128,27 @@ cqApp.factory('tokenInterceptor', [ '$rootScope', '$location', 'UserService', fu
 	};
 }]);
 
-cqApp.factory('account', [ '$http', function ( http ) {
+cqApp.factory('account', [ '$rootScope', '$http', '$location', 'UserService', function ( rootScope, http, location, UserService ) {
 	return {
-		login: function ( params, callback ) {
+		login: function ( params, callback, failureCb ) {
+			if (typeof callback !== 'function') {
+				callback = ( response ) => {
+					if (response.success) {
+						if (response.token) {
+							UserService.setOAuthToken( response.token );
+							UserService.setCurrentUser( response.user );
+
+							rootScope.$broadcast('user-logged-in');
+
+							location.path('/quips');
+						}
+					} else {
+						if (typeof failureCb === 'function') {
+							failureCb( response );
+						}
+					}
+				};
+			}
 			http.post(window.cqApp.__settings.apiBase() + 'account/login', params)
 				.success( callback );
 		},
@@ -157,6 +179,10 @@ cqApp.factory('account', [ '$http', function ( http ) {
 		removeUser: function ( id, callback ) {
 			http.get(window.cqApp.__settings.apiBase() + 'account/' + id + '/remove')
 				.success( callback );
+		},
+		changePassword: function ( params, callback ) {
+			http.post(window.cqApp.__settings.apiBase() + 'account/changePassword', params)
+				.success( callback );
 		}
 	};
 }]);
@@ -175,11 +201,11 @@ cqApp.factory('quips', [ '$http', function ( http, countries ) {
 				url: window.cqApp.__settings.apiBase() + 'quips/' + id
 			}).success( callback );
 		},
-		solve: function ( id, solution, callback ) {
+		solve: function ( id, params, callback ) {
 			http({
 				method: 'GET',
 				url: window.cqApp.__settings.apiBase() + 'quips/' + id + '/solve',
-				params: { solution: solution }
+				params: params // solution
 			}).success( callback );
 		},
 		create: function ( params, callback ) {
