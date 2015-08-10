@@ -1,6 +1,6 @@
 var loginControllers = angular.module('loginControllers', []);
 
-loginControllers.controller('LoginCtrl', [ '$rootScope', '$scope', 'account', '$location', 'UserService', function ( rootScope, scope, account, location, UserService ) {
+loginControllers.controller('LoginCtrl', [ '$rootScope', '$scope', 'account', '$location', 'UserService', 'Notification', function ( rootScope, scope, account, location, UserService, Notification ) {
 	rootScope.menuActive = false;
 
 	scope.login = function () {
@@ -10,9 +10,10 @@ loginControllers.controller('LoginCtrl', [ '$rootScope', '$scope', 'account', '$
 			username: scope.username,
 			password: scope.password
 		}, null, function failure ( response ) {
-			scope.formError = {
-				message: response.message
-			};
+			Notification.error({ message: response.message });
+			// scope.formError = {
+			// 	message: response.message
+			// };
 		});
 	};
 }]);

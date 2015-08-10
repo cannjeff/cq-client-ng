@@ -21,15 +21,15 @@
 		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 	}
 	&.button-success {
-		background-color: rgb(28, 184, 65);
+		background-color: $btn-success-color;
 	}
 	&.button-error {
-		background-color: rgb(202, 60, 60);
+		background-color: $btn-error-color;
 	}
 	&.button-warning {
-		background-color: rgb(223, 117, 20);
+		background-color: $btn-warning-color;
 	}
 	&.button-secondary {
-		background-color: rgb(66, 184, 221);
+		background-color: $btn-secondary-color;
 	}
 }

@@ -13,6 +13,7 @@ angular.module('moment', [])
 
 require('ngstorage');
 require('./app.services');
+require('./components/notification/angular-ui-notification');
 
 window.cqApp = angular.module('cqApp', [
 	'cqServices',
@@ -24,7 +25,8 @@ window.cqApp = angular.module('cqApp', [
 	require('./components/quip/quipControllers').name,
 	require('./components/admin/adminControllers').name,
 	'underscore',
-	'moment'
+	'moment',
+	'ui-notification'
 ]);
 
 window.cqApp.__settings = {

@@ -17,7 +17,7 @@ quipControllers.controller('QuipsListCtrl', [ '$rootScope', '$scope', '$location
 	};
 }]);
 
-quipControllers.controller('QuipsSolveCtrl', [ '$rootScope', '$scope', 'quips', '$routeParams', '_', function ( rootScope, scope, quips, routeParams, _ ) {
+quipControllers.controller('QuipsSolveCtrl', [ '$rootScope', '$scope', 'quips', '$routeParams', '_', 'Notification', function ( rootScope, scope, quips, routeParams, _, Notification ) {
 	rootScope.menuActive = false;
 
 	quips.byID(routeParams.id, function ( quip ) {
@@ -152,7 +152,8 @@ quipControllers.controller('QuipsCreateCtrl', [ '$rootScope', '$scope', 'quips',
 
 	scope.createQuip = function () {
 		quips.create( scope.quip, function ( resp ) {
-			console.log('create resp', resp);
+			////TODO show notification of quip created
+			scope.quip = {};
 		});
 	};
 }]);
@@ -160,19 +161,21 @@ quipControllers.controller('QuipsCreateCtrl', [ '$rootScope', '$scope', 'quips',
 quipControllers.controller('QuipsQuarantineCtrl', [ '$rootScope', '$scope', 'quips', function ( rootScope, scope, quips ) {
 	rootScope.menuActive = false;
 
-	quips.quarantineList(function ( quips ) {
-		scope.quips = quips;
-	});
+	scope.updateQuarantineList = () => {
+		quips.quarantineList(function ( quips ) {
+			scope.quips = quips;
+		});
+	};
 
 	scope.approve = function ( id ) {
 		quips.approve( id, function ( resp ) {
-
+			scope.updateQuarantineList();
 		});
 	};
 
 	scope.reject = function ( id ) {
 		quips.reject( id, function ( resp ) {
-
+			scope.updateQuarantineList();
 		});
 	};
 }]);
