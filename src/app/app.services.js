@@ -35,4 +35,62 @@ cqServices.service('UserService', [ '$localStorage', '$location', ( localStorage
 	};
 }]);
 
+cqServices.service('MenuService', [ '$rootScope', 'UserService', ( rootScope, UserService ) => {
+	return {
+		getMenuForUser: menuForUser
+	};
+
+	function menuForUser() {
+		var menu = [];
+
+		if (!UserService.isLoggedIn()) {
+			rootScope.hideMenu = true;
+		} else {
+			rootScope.hideMenu = false;
+		}
+
+		menu = [{
+			text: 'List',
+			href: '#/quips',
+			isSelected: function () {
+				return window.location.hash === this.href;
+			}
+		}, {
+			text: 'Scratchpad',
+			href: '#/quips/scratchpad',
+			isSelected: function () {
+				return window.location.hash === this.href;
+			}
+		}];
+
+		if (UserService.isCurator()) {
+			menu.push({
+				text: 'Create',
+				href: '#/quips/create',
+				isSelected: function () {
+					return window.location.hash === this.href;
+				}
+			}, {
+				text: 'Quarantine',
+				href: '#/quips/quarantine',
+				isSelected: function () {
+					return window.location.hash === this.href;
+				}
+			});
+		}
+
+		if (UserService.isAdmin()) {
+			menu.push({
+				text: 'Admin',
+				href: '#/admin',
+				isSelected: function () {
+					return window.location.hash === this.href;
+				}
+			});
+		}
+
+		return menu;
+	}
+}]);
+
 module.exports = cqServices;

@@ -1,43 +1,22 @@
 var menuDirectives = angular.module('menuDirectives', []);
 
-menuDirectives.controller('MainMenuCtrl', [ '$scope', function ( scope ) {
-	scope.menuItems = [{
-		text: 'List',
-		href: '#/quips',
-		isSelected: function () {
-			return window.location.hash === this.href;
-		}
-	}, {
-		text: 'Scratchpad',
-		href: '#/quips/scratchpad',
-		isSelected: function () {
-			return window.location.hash === this.href;
-		}
-	}, {
-		text: 'Create',
-		href: '#/quips/create',
-		isSelected: function () {
-			return window.location.hash === this.href;
-		}
-	}, {
-		text: 'Quarantine',
-		href: '#/quips/quarantine',
-		isSelected: function () {
-			return window.location.hash === this.href;
-		}
-	}, {
-		text: 'Admin',
-		href: '#/admin',
-		isSelected: function () {
-			return window.location.hash === this.href;
-		}
-	}];
-}]);
-
-menuDirectives.directive('cqMenu', function () {
+menuDirectives.directive('cqMenu', [ '$rootScope', 'MenuService', function ( rootScope, MenuService ) {
 	return {
-		templateUrl: './components/menu/menu.html'
+		templateUrl: './components/menu/menu.html',
+		controller: ( $scope ) => {
+			$scope.updateMenu = function () {
+				$scope.menuItems = MenuService.getMenuForUser();
+			};
+			$scope.updateMenu();
+
+			rootScope.$on('user-logged-in', () => {
+				$scope.updateMenu();
+			});
+			rootScope.$on('user-logged-out', () => {
+				$scope.updateMenu();
+			});
+		}
 	};
-});
+}]);
 
 module.exports = menuDirectives;

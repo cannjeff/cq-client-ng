@@ -69,7 +69,7 @@ cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, http
 		.when('/quips/quarantine', {
 			templateUrl: 'components/quip/quip-quarantine.html',
 			controller: 'QuipsQuarantineCtrl',
-			admin: true
+			curator: true
 		})
 		.when('/quips/scratchpad', {
 			templateUrl: 'components/quip/quip-scratch.html',
@@ -78,6 +78,11 @@ cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, http
 		.when('/quips/:id', {
 			templateUrl: 'components/quip/quip-solve.html',
 			controller: 'QuipsSolveCtrl'
+		})
+		.when('/quips/:id/update', {
+			templateUrl: 'components/quip/quip-update.html',
+			controller: 'QuipUpdateCtrl',
+			curator: true
 		})
 		.when('/admin', {
 			templateUrl: 'components/admin/admin.html',
@@ -94,11 +99,13 @@ cqApp.run([ '$rootScope', '$location', 'UserService', function ( rootScope, loca
 		if (!UserService.isLoggedIn()) {
 			console.log('User not logged in, rerouting to login');
 			location.path('/login');
+			return;
 		}
 		if (params.$$route && params.$$route.curator) {
 			if (!UserService.isCurator() && !UserService.isAdmin()) {
 				console.log('User not a curator');
 				event.preventDefault();
+				return;
 			}
 		}
 		if (params.$$route && params.$$route.admin) {
@@ -213,11 +220,10 @@ cqApp.factory('quips', [ '$http', function ( http, countries ) {
 		create: function ( params, callback ) {
 			http.post(window.cqApp.__settings.apiBase() + 'quips/create', params)
 				.success(callback);
-			// http({
-			// 	method: 'POST',
-			// 	url: window.cqApp.__settings.apiBase() + 'quips/create',
-			// 	params: params
-			// }).success( callback );
+		},
+		update: function ( id, params, callback ) {
+			http.post(window.cqApp.__settings.apiBase() + 'quips/' + id + '/update', params)
+				.success( callback );
 		},
 		quarantineList: function ( callback ) {
 			http({
@@ -237,6 +243,10 @@ cqApp.factory('quips', [ '$http', function ( http, countries ) {
 				method: 'GET',
 				url: window.cqApp.__settings.apiBase() + 'quips/' + id + '/reject'
 			}).success( callback );
+		},
+		archive: function ( id, callback ) {
+			http.get(window.cqApp.__settings.apiBase() + 'quips/' + id + '/archive')
+				.success( callback );
 		}
 	};
 }]);

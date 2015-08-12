@@ -1,0 +1,22 @@
+<div class="cq-screen-quip-update">
+	<h2>Update</h2>
+	<form class="pure-form pure-form-stacked cq-quip-update-form">
+		<fieldset>
+			<label>Quip (encrypted):</label>
+			<input class="pure-input-1" ng-model="quip.encrypted_text" />
+
+			<label>Quip:*</label>
+			<input class="pure-input-1" ng-model="quip.decrypted_text" />
+
+			<label>Hint:*</label>
+			<input class="hint" ng-model="quip.hint_key" required />
+			<div class="hint">=></div>
+			<input class="hint" ng-model="quip.hint_value" required />
+
+			<label>Date (mm/dd/yyyy):</label>
+			<input ng-model="quip.created_date" readonly />
+
+			<input class="pure-button pure-button-primary" type="button" ng-click="updateQuip()" value="Update" />
+		</fieldset>
+	</form>
+</div>

@@ -1,19 +1,32 @@
 var quipControllers = angular.module('quipControllers', []);
 
-quipControllers.controller('QuipsListCtrl', [ '$rootScope', '$scope', '$location', 'quips', '_', 'moment', function ( rootScope, scope, location, quips, _, moment ) {
+quipControllers.controller('QuipsListCtrl', [ '$rootScope', '$scope', '$location', 'quips', '_', 'moment', 'UserService', function ( rootScope, scope, location, quips, _, moment, UserService ) {
 	rootScope.menuActive = false;
 
-	quips.list(function ( quips ) {
-		_(quips).each(function ( quip ) {
-			if (quip.created_date) {
-				quip.formattedCreatedDate = moment(quip.created_date).format('dddd, MMMM Do YYYY');
-			}
+	scope.getQuips = function () {
+		quips.list(function ( quips ) {
+			_(quips).each(function ( quip ) {
+				if (quip.created_date) {
+					quip.formattedCreatedDate = moment(quip.created_date).format('dddd, MMMM Do YYYY');
+				}
+			});
+			scope.quips = quips;
 		});
-		scope.quips = quips;
-	});
+	};
+	scope.getQuips();
+
+	scope.showEditButton = UserService.isCurator() || UserService.isAdmin();
 
 	scope.navToQuip = ( id ) => {
 		location.path( '/quips/' + id);
+	};
+	scope.updateQuip = ( id ) => {
+		location.path( '/quips/' + id + '/update');
+	};
+	scope.deleteQuip = ( id ) => {
+		quips.archive( id, () => {
+			scope.getQuips();
+		});
 	};
 }]);
 
@@ -123,7 +136,7 @@ quipControllers.controller('QuipsSolveCtrl', [ '$rootScope', '$scope', 'quips', 
 				regex = new RegExp(_.keys(scope.keyObject).join('|'), 'g'),
 				params = {
 					solution: '',
-					keyObject: scope.keyObject
+					keyObject: JSON.stringify(scope.keyObject)
 				};
 
 			params.solution = encryptedText.replace(regex, function ( matched ) {
@@ -166,6 +179,7 @@ quipControllers.controller('QuipsQuarantineCtrl', [ '$rootScope', '$scope', 'qui
 			scope.quips = quips;
 		});
 	};
+	scope.updateQuarantineList();
 
 	scope.approve = function ( id ) {
 		quips.approve( id, function ( resp ) {
@@ -223,6 +237,29 @@ quipControllers.controller('QuipsScratchCtrl', [ '$rootScope', '$scope', functio
 		});
 
 		scope.chars = chars;
+	};
+}]);
+
+quipControllers.controller('QuipUpdateCtrl', [ '$rootScope', '$scope', '$routeParams', 'quips', 'Notification', function ( rootScope, scope, routeParams, quips, Notification ) {
+	rootScope.menuActive = false;
+
+	scope.getQuip = function () {
+		quips.byID(routeParams.id, function ( quip ) {
+			scope.quip = quip;
+		});
+	};
+
+	scope.getQuip();
+
+	scope.updateQuip = function () {
+		quips.update( routeParams.id, scope.quip, function ( response ) {
+			if (response.success) {
+				Notification.success('Update successful!');
+				scope.getQuip();
+			} else {
+				Notification.error('Update failed!');
+			}
+		});
 	};
 }]);
 

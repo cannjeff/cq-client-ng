@@ -10,6 +10,7 @@ menuControllers.controller('UserCtrl', [ '$rootScope', '$scope', 'UserService', 
 	scope.logout = () => {
 		scope.currentUser = null;
 		UserService.logout();
+		rootScope.$broadcast('user-logged-out');
 	};
 	scope.changePassword = () => {
 		location.path('/changePassword');

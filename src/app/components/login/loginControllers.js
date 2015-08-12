@@ -4,16 +4,11 @@ loginControllers.controller('LoginCtrl', [ '$rootScope', '$scope', 'account', '$
 	rootScope.menuActive = false;
 
 	scope.login = function () {
-		delete scope.formError;
-
 		account.login({
 			username: scope.username,
 			password: scope.password
 		}, null, function failure ( response ) {
 			Notification.error({ message: response.message });
-			// scope.formError = {
-			// 	message: response.message
-			// };
 		});
 	};
 }]);
@@ -39,14 +34,12 @@ loginControllers.controller('SignUpCtrl', [ '$rootScope', '$scope', '$location',
 	};
 }]);
 
-loginControllers.controller('ChangePasswordCtrl', [ '$rootScope', '$scope', '$location', 'account', ( rootScope, scope, location, account ) => {
+loginControllers.controller('ChangePasswordCtrl', [ '$rootScope', '$scope', '$location', 'account', 'Notification', ( rootScope, scope, location, account, Notification ) => {
 	rootScope.menuActive = false;
 
 	scope.changePassword = () => {
-		delete scope.formError;
-
 		if (scope.newPassword !== scope.repeatNewPassword) {
-			scope.formError = { message: 'Passwords don\'t match' };
+			Notification.error('Passwords don\'t match');
 			return;
 		}
 
@@ -55,9 +48,10 @@ loginControllers.controller('ChangePasswordCtrl', [ '$rootScope', '$scope', '$lo
 			newPassword: scope.newPassword
 		}, ( response ) => {
 			if (response.success) {
-
+				Notification.success('Password changed successfully.');
+				location.path('/login');
 			} else {
-				scope.formError = { message: 'Failed: Please try again.' };
+				Notification.error('Failed: Please try again.');
 			}
 		});
 	};

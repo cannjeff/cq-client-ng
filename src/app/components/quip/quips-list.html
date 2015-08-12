@@ -1,6 +1,9 @@
 <div class="cq-screen-quips-list">
 	<h2>Quips</h2>
-	<table class="pure-table">
+	<div ng-show="showEditButton" class="edit-button-holder">
+		<button class="pure-button pure-button-primary button-xsmall" ng-click="editMode = !editMode">Edit</button>
+	</div>
+	<table class="pure-table pure-table-striped cq-table">
 		<thead>
 			<tr>
 				<th>Date Added</th>
@@ -15,7 +18,11 @@
 				<td>{{ quip.encrypted_text }}</td>
 				<td>{{ quip.solved }}</td>
 				<td>
-					<button class="pure-button pure-button-primary" ng-click="navToQuip(quip._id)">Solve</button>
+					<div class="cq-table-button-wrapper">
+						<button class="pure-button pure-button-primary button-small" ng-click="navToQuip(quip._id)">Solve</button>
+						<button ng-show="editMode" class="pure-button button-secondary button-small" ng-click="updateQuip(quip._id)">Update</button>
+						<button ng-show="editMode" class="pure-button button-error button-small" ng-click="deleteQuip(quip._id)">Delete</button>
+					</div>
 				</td>
 			</tr>
 		</tbody>
