@@ -14,7 +14,7 @@
     "errorhandler": "^1.4.0",
     "express": "^4.12.4",
     "moment": "^2.10.6",
-    "ngstorage": "^0.3.6",
+    "ngstorage": "0.3.6",
     "serve-static": "^1.9.3",
     "underscore": "^1.8.3"
   },
