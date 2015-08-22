@@ -2,6 +2,38 @@ var angular = require('angular-bsfy');
 
 var cqServices = angular.module('cqServices', []);
 
+
+// https://cryptoquip.io -> https://api.cryptoquip.io/v1/
+// https://test.cryptoquip.io -> https://testapi.cryptoquip.io/v1/
+// http://localhost:3000 -> http://localhost:4000/v1/
+
+cqServices.service('APIService', [ '$window',  ( $window ) => {
+	var protocol 	= localStorage.getItem('cq_api_protocol') 	|| $window.location.protocol,
+		host 		= localStorage.getItem('cq_api_host') 		|| $window.location.host,
+		port 		= localStorage.getItem('cq_api_port'),
+		version 	= localStorage.getItem('cq_api_version') 	|| 'v1';
+
+
+	function apiBase() {
+		var base = protocol + '//' + host;
+		if (port && port.length > 0) {
+			base += ':' + port;
+		}
+		base += '/' + version + '/';
+		return base;
+	}
+
+	var map = {
+		'http://localhost:3000': 'http://localhost:4000/v1/',
+		'https://test.cryptoquip.io': 'https://testapi.cryptoquip.io/v1/',
+		'https://cryptoquip.io': 'https://api.cryptoquip.io/v1/'
+	};
+
+	return {
+		getApiBase: () => { return map[ $window.location.origin ]; }
+	};
+}]);
+
 cqServices.service('UserService', [ '$localStorage', '$location', ( localStorage, location ) => {
 	var storage = localStorage;
 
