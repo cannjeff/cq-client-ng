@@ -4,7 +4,8 @@ quipControllers.controller('QuipsListCtrl', [ '$rootScope', '$scope', '$location
 	rootScope.menuActive = false;
 
 	scope.getQuips = function () {
-		quips.list(function ( quips ) {
+		quips.list(function ( response ) {
+			var quips = response.data;
 			_(quips).each(function ( quip ) {
 				if (quip.created_date) {
 					quip.formattedCreatedDate = moment(quip.created_date).format('dddd, MMMM Do YYYY');
@@ -158,15 +159,24 @@ quipControllers.controller('QuipsSolveCtrl', [ '$rootScope', '$scope', 'quips', 
 	});
 }]);
 
-quipControllers.controller('QuipsCreateCtrl', [ '$rootScope', '$scope', 'quips', function ( rootScope, scope, quips ) {
+quipControllers.controller('QuipsCreateCtrl', [ '$rootScope', '$scope', 'quips', 'moment', 'Notification', function ( rootScope, scope, quips, moment, Notification ) {
 	rootScope.menuActive = false;
 
-	scope.quip = {};
+	scope.quip = {
+		featured_date: moment().toDate()
+	};
 
 	scope.createQuip = function () {
-		quips.create( scope.quip, function ( resp ) {
-			////TODO show notification of quip created
-			scope.quip = {};
+		if (!scope.isFeatured) {
+			delete scope.quip.featured_date;
+		}
+		quips.create( scope.quip, function ( response ) {
+			if (response.success) {
+				Notification.success('Quip created successfully!');
+				scope.quip = {};
+			} else {
+				Notification.error('An error occurred created the quip.');
+			}
 		});
 	};
 }]);
@@ -175,8 +185,8 @@ quipControllers.controller('QuipsQuarantineCtrl', [ '$rootScope', '$scope', 'qui
 	rootScope.menuActive = false;
 
 	scope.updateQuarantineList = () => {
-		quips.quarantineList(function ( quips ) {
-			scope.quips = quips;
+		quips.quarantineList(function ( response ) {
+			scope.quips = response.data;
 		});
 	};
 	scope.updateQuarantineList();
@@ -244,8 +254,8 @@ quipControllers.controller('QuipUpdateCtrl', [ '$rootScope', '$scope', '$routePa
 	rootScope.menuActive = false;
 
 	scope.getQuip = function () {
-		quips.byID(routeParams.id, function ( quip ) {
-			scope.quip = quip;
+		quips.byID(routeParams.id, function ( response ) {
+			scope.quip = response.data;
 		});
 	};
 

@@ -45,18 +45,36 @@ cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, http
 		.when('/', {
 			redirectTo: '/login',
 		})
-		.when('/login', {
-			templateUrl: 'components/login/login.html',
-			controller: 'LoginCtrl'
-		})
+		/* Account creation routes */
 		.when('/signUp', {
 			templateUrl: 'components/login/sign-up.html',
 			controller: 'SignUpCtrl'
 		})
-		.when('/changePassword', {
+		.when('/accountCreated', {
+			templateUrl: 'components/login/account-created.html'
+		})
+		.when('/verifyEmail/:token', {
+			templateUrl: 'components/login/verify-email.html',
+			controller: 'VerifyEmailCtrl'
+		})
+		.when('/resendVerification', {
+			templateUrl: 'components/login/resend-verification.html',
+			controller: 'ResendVerificationCtrl'
+		})
+		/* Auth and Account management routes */
+		.when('/login', {
+			templateUrl: 'components/login/login.html',
+			controller: 'LoginCtrl'
+		})
+		.when('/account', {
+			templateUrl: 'components/account/account.html',
+			controller: 'AccountCtrl'
+		})
+		.when('/account/changePassword', {
 			templateUrl: 'components/login/change-password.html',
 			controller: 'ChangePasswordCtrl'
 		})
+		/* Quip routes */
 		.when('/quips', {
 			templateUrl: 'components/quip/quips-list.html',
 			controller: 'QuipsListCtrl'
@@ -84,6 +102,7 @@ cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, http
 			controller: 'QuipUpdateCtrl',
 			curator: true
 		})
+		/* Admin routes */
 		.when('/admin', {
 			templateUrl: 'components/admin/admin.html',
 			controller: 'AdminCtrl',
@@ -93,11 +112,16 @@ cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, http
 
 cqApp.run([ '$rootScope', '$location', 'UserService', function ( rootScope, location, UserService ) {
 	rootScope.$on('$routeChangeStart', ( event, params ) => {
-		if (params.$$route.originalPath.indexOf('login') !== -1 || params.$$route.originalPath.indexOf('signUp') !== -1) {
+		var originalPath = params.$$route.originalPath;
+		if (originalPath.indexOf('login') !== -1 ||
+			originalPath.indexOf('signUp') !== -1 ||
+			originalPath.indexOf('verifyEmail') !== -1 ||
+			originalPath.indexOf('accountCreated') !== -1 ||
+			originalPath.indexOf('resendVerification') !== -1) {
 			return;
 		}
 		if (!UserService.isLoggedIn()) {
-			console.log('User not logged in, rerouting to login');
+			console.log('User not logged in, rerouting to login from', originalPath);
 			location.path('/login');
 			return;
 		}
@@ -113,6 +137,12 @@ cqApp.run([ '$rootScope', '$location', 'UserService', function ( rootScope, loca
 				console.log('User not an admin');
 				event.preventDefault();
 			}
+		}
+	});
+
+	rootScope.$on('$routeChangeSuccess', ( event, params ) => {
+		if (typeof ga === 'function') {
+			ga('send', 'pageview', params.$$route.originalPath);
 		}
 	});
 }]);
@@ -131,6 +161,10 @@ cqApp.factory('tokenInterceptor', [ '$rootScope', '$location', 'UserService', fu
 			return config;
 		},
 		responseError: function ( response ) {
+			if (response.status === 401) {
+				UserService.logout();
+				location.path('/login');
+			}
 			// location.path('/');
 			return response;
 		}
@@ -163,6 +197,14 @@ cqApp.factory('account', [ '$rootScope', '$http', '$location', 'UserService', fu
 		},
 		signUp: function ( params, callback ) {
 			http.post(window.cqApp.__settings.apiBase() + 'account/create', params)
+				.success( callback );
+		},
+		verify: function ( token, callback ) {
+			http.get(window.cqApp.__settings.apiBase() + 'account/verify/' + token)
+				.success( callback );
+		},
+		resendVerification: function ( params, callback ) {
+			http.post(window.cqApp.__settings.apiBase() + 'account/resendVerification', params)
 				.success( callback );
 		},
 		list: function ( callback ) {

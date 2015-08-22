@@ -10,6 +10,13 @@ adminControllers.controller('AdminCtrl', [ '$scope', '$rootScope', 'account', '$
 
 				_(scope.users).each(function ( user ) {
 					user.formattedCreatedDate = moment(user.created_date).format('MM/DD/YYYY HH:mm:ss');
+					var timeToExpire = '- -';
+
+					if (user.verificationTokenExpiration) {
+						timeToExpire = moment(user.verificationTokenExpiration).from(new Date(), true);
+					}
+
+					user.timeToExpire = timeToExpire;
 				});
 			}
 		});

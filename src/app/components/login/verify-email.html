@@ -1,0 +1,9 @@
+<div class="cq-screen-verify-email">
+	<h2>Account Verification</h2>
+	<p ng-hide="pageError">
+		We're verifying your email. This should only take a second.
+	</p>
+	<div ng-show="pageError">
+		<div>{{ pageError.message }}</div>
+	</div>
+</div>

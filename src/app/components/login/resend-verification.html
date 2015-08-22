@@ -1,0 +1,10 @@
+<div class="cq-screen-resend-verification">
+	<h2>Resend Verification</h2>
+	<form name="resendVerification" class="pure-form cq-form cq-resend-verification-form">
+		<fieldset>
+			<input class="pure-input-1" ng-model="email" placeholder="Email" autocapitalize="off" type="email" required />
+
+			<button class="pure-button pure-button-primary" type="button" ng-click="resend()" ng-disabled="!resendVerification.$valid">Resend</button>
+		</fieldset>
+	</form>
+</div>

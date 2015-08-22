@@ -22,8 +22,13 @@
 			<input class="hint" ng-model="quip.hint_value" required />
 		</div>
 		<div class="form_row">
-			<label>Date (mm/dd/yyyy):</label>
-			<input ng-model="quip.date" required />
+			<label for="featured" class="pure-checkbox">
+				Featured: <input name="featured" type="checkbox" ng-model="isFeatured" />
+			</label>
+		</div>
+		<div class="form_row">
+			<label>Featured Date:</label>
+			<input ng-model="quip.featured_date" type="date" ng-disabled="!isFeatured" />
 		</div>
 
 		<div class="form_row">

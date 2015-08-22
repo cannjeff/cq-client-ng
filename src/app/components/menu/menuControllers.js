@@ -13,7 +13,7 @@ menuControllers.controller('UserCtrl', [ '$rootScope', '$scope', 'UserService', 
 		rootScope.$broadcast('user-logged-out');
 	};
 	scope.changePassword = () => {
-		location.path('/changePassword');
+		location.path('/account/changePassword');
 	};
 }]);
 

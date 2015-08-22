@@ -1,8 +1,16 @@
+$headerHeight: 40px;
+
+#header {
+	width: 100%;
+	background-color: $menu-background;
+	height: $headerHeight;
+	color: white;
+}
 #layout {
 	#menu {
 		width: 150px;
 		position: fixed;
-		top: 0;
+		top: 0; // $headerHeight;
 		bottom: 0;
 		background-color: $menu-background;
 	}

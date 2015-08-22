@@ -89,6 +89,15 @@ cqServices.service('MenuService', [ '$rootScope', 'UserService', ( rootScope, Us
 			});
 		}
 
+		/* Add the Account menu last */
+		menu.push({
+			text: 'Account',
+			href: '#/account',
+			isSelected: function () {
+				return window.location.hash === this.href;
+			}
+		});
+
 		return menu;
 	}
 }]);
