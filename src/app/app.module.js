@@ -121,7 +121,7 @@ cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, http
 }]);
 
 cqApp.run([ '$rootScope', '$location', 'UserService', function ( rootScope, location, UserService ) {
-	rootScope.$on('$routeChangeStart', ( event, params ) => {
+	rootScope.$on('$locationChangeStart', ( event, params ) => {debugger;
 		var originalPath = params.$$route.originalPath;
 		if (originalPath.indexOf('login') !== -1 ||
 			originalPath.indexOf('signUp') !== -1 ||
