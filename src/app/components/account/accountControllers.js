@@ -1,6 +1,6 @@
 var accountControllers = angular.module('accountControllers', []);
 
-accountControllers.controller('AccountCtrl', [ () => {
+accountControllers.controller('AccountCtrl', [ '$rootScope', (rootScope) => {
 	rootScope.menuActive = true;
 }]);
 

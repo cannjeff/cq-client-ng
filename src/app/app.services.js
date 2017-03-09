@@ -13,7 +13,6 @@ cqServices.service('APIService', [ '$window',  ( $window ) => {
 		port 		= localStorage.getItem('cq_api_port'),
 		version 	= localStorage.getItem('cq_api_version') 	|| 'v1';
 
-
 	function apiBase() {
 		var base = protocol + '//' + host;
 		if (port && port.length > 0) {

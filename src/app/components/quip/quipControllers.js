@@ -34,7 +34,8 @@ quipControllers.controller('QuipsListCtrl', [ '$rootScope', '$scope', '$location
 quipControllers.controller('QuipsSolveCtrl', [ '$rootScope', '$scope', 'quips', '$routeParams', '_', 'Notification', function ( rootScope, scope, quips, routeParams, _, Notification ) {
 	rootScope.menuActive = false;
 
-	quips.byID(routeParams.id, function ( quip ) {
+	quips.byID(routeParams.id, function ( response ) {
+		var quip = response.data;
 		scope.quip = quip;
 		scope.alphabet = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ];
 		scope.keyObject = _.object(scope.alphabet); /* keyObject is a terrible name, but its late and im tired */

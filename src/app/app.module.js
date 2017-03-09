@@ -19,6 +19,7 @@ window.cqApp = angular.module('cqApp', [
 	'cqServices',
 	'ngStorage',
 	require('angular-bsfy/route').name,
+	require('./components/account/accountControllers').name,
 	require('./components/login/loginControllers').name,
 	require('./components/menu/menuControllers').name,
 	require('./components/menu/menuDirectives').name,
@@ -48,8 +49,10 @@ window.cqApp = angular.module('cqApp', [
 // };
 
 
-cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, httpProvider )  {
+cqApp.config([ '$routeProvider', '$httpProvider', '$locationProvider', function ( routeProvider, httpProvider, $locationProvider )  {
 	httpProvider.interceptors.push('tokenInterceptor');
+
+	$locationProvider.hashPrefix('');
 
 	routeProvider
 		.when('/', {
@@ -121,8 +124,9 @@ cqApp.config([ '$routeProvider', '$httpProvider', function ( routeProvider, http
 }]);
 
 cqApp.run([ '$rootScope', '$location', 'UserService', function ( rootScope, location, UserService ) {
-	rootScope.$on('$locationChangeStart', ( event, params ) => {debugger;
-		var originalPath = params.$$route.originalPath;
+	rootScope.$on('$locationChangeStart', ( event, params ) => {
+		// var originalPath = params.$$route.originalPath;
+		var originalPath = params.substr(params.indexOf('#/') + 2);
 		if (originalPath.indexOf('login') !== -1 ||
 			originalPath.indexOf('signUp') !== -1 ||
 			originalPath.indexOf('verifyEmail') !== -1 ||
@@ -188,10 +192,10 @@ cqApp.factory('account', [ '$rootScope', '$http', '$location', 'UserService', 'A
 		login: function ( params, callback, failureCb ) {
 			if (typeof callback !== 'function') {
 				callback = ( response ) => {
-					if (response.success) {
-						if (response.token) {
-							UserService.setOAuthToken( response.token );
-							UserService.setCurrentUser( response.user );
+					if (response.data.success) {
+						if (response.data.token) {
+							UserService.setOAuthToken( response.data.token );
+							UserService.setCurrentUser( response.data.user );
 
 							rootScope.$broadcast('user-logged-in');
 
@@ -199,13 +203,13 @@ cqApp.factory('account', [ '$rootScope', '$http', '$location', 'UserService', 'A
 						}
 					} else {
 						if (typeof failureCb === 'function') {
-							failureCb( response );
+							failureCb( response.data );
 						}
 					}
 				};
 			}
 			http.post(apiBase + 'account/login', params)
-				.success( callback );
+				.then( callback );
 		},
 		signUp: function ( params, callback ) {
 			http.post(apiBase + 'account/create', params)
